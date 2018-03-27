@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demoWebClient.account.dao.RoleMapper">
+    <select id="login" parameterType="com.example.demoWebClient.account.dto.Role" resultType="com.example.demoWebClient.account.dto.Role">
+        select r.UID,r.USERNAME as userName,r.USERPWD as userPassWord,r.USEROLE as userRole,r.USERINFO as userInfo
+         FROM ROLE r WHERE #{UID} = r.UID AND #{userPassWord} = r.USERPWD
+    </select>
+
+    <select id="getUseInfo" parameterType="com.example.demoWebClient.account.dto.Role" resultType="com.example.demoWebClient.account.dto.RoleInfo">
+        select ri.SERIALNO,ri.UPHONE as userPhone,ri.UMAIL as userMail,ri.UCLASS as userClass,
+        ri.UUNIVERSITY as userUniversity,ri.USCHOOL as userSchool,ri.UROOM as userRoom,
+        ri.USEX as userSex,ri.UTX as userTencentAccount,ri.UWEIBO as userWeibo FROM ROLEINFO ri WHERE #{USERINFO} = ri.SERIALNO
+    </select>
+
+    <select id="getUserListByRole" parameterType="com.example.demoWebClient.account.dto.Role" resultType="com.example.demoWebClient.account.dto.Role">
+        select r.UID,r.USERNAME as userName,r.USERPWD as userPassWord,r.USEROLE as userRole,r.USERINFO as userInfo
+         FROM ROLE r WHERE 1=1
+        <if test="UID != null and UID != ''.toString()">
+         AND #{UID} = r.UID
+        </if>
+        <if test="userRole = null and userRole != ''.toString()">
+        AND #{userRole} = r.USEROLE
+        </if>
+    </select>
+
+    <select id="getUserListByRoleInfo" parameterType="com.example.demoWebClient.account.dto.RoleInfo" resultType="com.example.demoWebClient.account.dto.Role">
+        select r.UID,r.USERNAME as userName,r.USERPWD as userPassWord,r.USEROLE as userRole,r.USERINFO as userInfo
+         FROM ROLE r,ROLEINFO ri WHERE r.ROLEINFO = ri.SERIALNO
+        <if test="userPhone != null and userPhone != ''.toString()">
+            AND #{userPhone} = ri.userPhone
+        </if>
+        <if test="userClass != null and userClass != ''.toString()">
+            AND #{userClass} = ri.userClass
+        </if>
+        <if test="userSchool != null and userSchool != ''.toString()">
+            AND #{userSchool} = ri.userSchool
+        </if>
+        <if test="userUniversity != null and userUniversity != ''.toString()">
+            AND #{userUniversity} = ri.userUniversity
+        </if>
+        <if test="userRoom != null and userRoom != ''.toString()">
+            AND #{userRoom} = ri.userRoom
+        </if>
+        <if test="userSex != null and userSex != ''.toString()">
+            AND #{userSex} = ri.userSex
+        </if>
+        <if test="userMail != null and userMail != ''.toString()">
+            AND #{userMail} = ri.userMail
+        </if>
+    </select>
+
+    <update id="update_a" parameterType="com.example.demoWebClient.account.dto.Role">
+        UPDATE ROLE SET USERPWD = #{userPassWord},USERNAME = #{userName},USEROLE = #{userRole},USERINFO = #{userInfo} WHERE UID = #{UID}
+    </update>
+
+    <update id="update_b" parameterType="com.example.demoWebClient.account.dto.RoleInfo">
+        UPDATE ROLEINFO SET UPHONE = #{userPhone},UMAIL = #{userMail},UCLASS = #{userClass},USCHOOL = #{userSchool},
+        UNIVERSITY = #{userUniversity},UROOM = #{userRoom},USEX = #{userSex},
+        UTX = #{userTencentAccount},UWEIBO = #{userWeibo} WHERE SERIALNO = #{serialno}
+    </update>
+
+
+    <insert id="registered_a" parameterType="com.example.demoWebClient.account.dto.Role">
+        insert into ROLE(UID,userPassWord,userName,userRole,userInfo) VALUES (#{UID},#{userPassWord},#{userName},#{userRole},#{userInfo})
+    </insert>
+
+    <insert id="registered_b" parameterType="com.example.demoWebClient.account.dto.RoleInfo">
+        insert into ROLEINFO VALUES (#{serialNo},#{userPhone},#{userMail},#{userClass},#{userSchool},#{userUniversity},#{userRoom},#{userSex},#{userTencentAccount},#{userWeibo})
+    </insert>
+
+
+</mapper>

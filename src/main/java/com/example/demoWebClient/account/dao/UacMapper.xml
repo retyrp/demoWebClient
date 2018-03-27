@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demoWebClient.account.dao.UacMapper">
+
+    <select id="getAuthInfo" parameterType="com.example.demoWebClient.account.dto.UAC" resultType="com.example.demoWebClient.account.dto.UAC">
+        SELECT RID AS RoleID, RNAME AS RoleName, RKIND AS RoleKind, RBDATE AS RoleBeginDate, REDATE AS RoleEndDate, RU AS RoleU FROM UAC WHERE 1=1
+            <if test="RoleID != null">
+                AND RoleID = #{RoleID}
+            </if>
+            <if test="RoleName != null">
+                AND RoleName = #{RoleName}
+            </if>
+            <if test="RoleKind != null">
+                AND RoleKind = #{RoleKind}
+            </if>
+            <if test="RoleBeginDate != null">
+                AND RoleBeginDate = #{RoleBeginDate}
+            </if>
+            <if test="RoleEndDate != null">
+                AND RoleEndDate = #{RoleEndDate}
+            </if>
+            <if test="RoleU != null">
+                AND RoleU = #{RoleU}
+            </if>
+    </select>
+
+    <update id="updateAuthInfo" parameterType="com.example.demoWebClient.account.dto.UAC">
+        UPDATE UAC SET RNAME = #{RoleName},RKIND = #{RoleKind},RBDATE = #{RoleBeginDate},REDATE = #{RoleEndDate},RU = #{RoleU} WHERE RID = #{RoleID}
+    </update>
+
+    <insert id="addRecord" parameterType="com.example.demoWebClient.account.dto.UAC">
+        INSERT INTO UAC VALUES (#{RoleID},#{RoleName},#{RoleKind},#{RoleBeginDate},#{RoleU},#{RoleEndDate})
+    </insert>
+
+    <delete id="deleRecord" parameterType="com.example.demoWebClient.account.dto.UAC">
+        DELETE FROM UAC WHERE RID = #{RoleID}
+    </delete>
+
+</mapper>
