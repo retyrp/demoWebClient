@@ -8,6 +8,7 @@ import com.example.demoWebClient.account.service.UserAccountValidationService;
 import org.apache.log4j.Logger;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -57,5 +58,15 @@ public class UserAccountValidationServiceImpl implements UserAccountValidationSe
     @Override
     public boolean logout(Role r) {
         return false;
+    }
+
+    @Override
+    public Role getUserByUserId(String userId) {
+        Role r = new Role();
+        r.setUserRole("admin,user");
+        r.setUserPassWord(new BCryptPasswordEncoder().encode("123456"));
+        r.setUserName("KingJiongEn");
+        r.setUID("abc");
+        return r;
     }
 }

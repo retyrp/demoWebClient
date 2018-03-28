@@ -27,4 +27,10 @@ public interface UserAccountValidationService {
      */
     boolean logout(Role r);
 
+    /**
+     * 根据UserId获取用户
+     * @return
+     */
+    Role getUserByUserId(String userId);
+
 }

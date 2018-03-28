@@ -1,7 +1,5 @@
 package com.example.demoWebClient.account.dto;
 
-import javax.annotation.sql.DataSourceDefinition;
-
 /**
  *  用户角色
  */

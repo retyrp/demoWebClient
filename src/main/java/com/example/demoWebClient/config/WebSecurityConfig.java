@@ -1,45 +1,50 @@
 package com.example.demoWebClient.config;
 
-import com.example.demoWebClient.filter.account.AccountAuthenticationFilter;
-import com.example.demoWebClient.filter.account.AccountAuthenticationManager;
+import com.example.demoWebClient.config.service.AnyUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+@Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private AnyUserDetailsService anyUserDetailsService;
 
     /**
      * Url权限拦截设置
+     *
      * @param http
      * @throws Exception
      */
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/login").permitAll()
                 .antMatchers("/user/**").hasRole("USER")
-                .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/user")
-                .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/login");
-        /** 在口令校验之前 添加自定义过滤器 */
-        http.addFilterAt(AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        ;
+        CsrfTokenResponseHeaderBindingFilter csrfTokenResponseHeaderBindingFilter = new CsrfTokenResponseHeaderBindingFilter();
+        http.addFilterAt(csrfTokenResponseHeaderBindingFilter,CsrfTokenResponseHeaderBindingFilter.class);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(anyUserDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
     /**
-     * 自定义账户过滤器
-     * @return
+     * 密码加密
      */
-    private AccountAuthenticationFilter AuthenticationFilter(){
-        AccountAuthenticationFilter authenticationFilter = new AccountAuthenticationFilter("/login/**");
-        SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-        successHandler.setAlwaysUseDefaultTargetUrl(true);
-        successHandler.setDefaultTargetUrl("/user");
-        authenticationFilter.setAuthenticationManager(new AccountAuthenticationManager());
-        authenticationFilter.setAuthenticationSuccessHandler(successHandler);
-        return authenticationFilter;
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
+
 }
