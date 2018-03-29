@@ -1,5 +1,8 @@
 package com.example.demoWebClient.config.service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author YRP
  * @Title: ConfigLoadService 配置加载
@@ -10,12 +13,12 @@ public interface ConfigLoadService {
     /**
      * 加载配置
      */
-    void loadConfig();
+    String loadConfig(String name);
 
     /**
      * 保存配置
      */
-    void saveConfig();
+    void saveConfig(List<Map> map);
 
     /**
      * 预览配置

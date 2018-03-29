@@ -27,10 +27,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/user/**").hasRole("USER").and().csrf().disable()
         ;
-        CsrfTokenResponseHeaderBindingFilter csrfTokenResponseHeaderBindingFilter = new CsrfTokenResponseHeaderBindingFilter();
-        http.addFilterAt(csrfTokenResponseHeaderBindingFilter,CsrfTokenResponseHeaderBindingFilter.class);
     }
 
     @Override

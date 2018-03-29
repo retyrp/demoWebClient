@@ -37,14 +37,35 @@ public class ConfigLoadServiceImpl implements ConfigLoadService{
     private static SystemConfig systemConfig;
 
     @Override
-    public void loadConfig() {
-        List<String> init = new ArrayList<>();
-        init.add("SystemName");
+    public String loadConfig(String name) {
+        List<Map> result = null;
+        List list = new ArrayList();
+        list.add(name);
+        result = callRedis(list);
+        if(!result.isEmpty())
+            return result
+                    .iterator()
+                    .next()
+                    .get("s_value")
+                    .toString();
+
+        Map map = new HashMap();
+        map.put("s_key",name);
+        result = callDB(map);
+        if(result.isEmpty())
+            return null;
+        setRedis(result);
+        return result
+                .iterator()
+                .next()
+                .get("s_value")
+                .toString();
     }
 
     @Override
-    public void saveConfig() {
-
+    public void saveConfig(List<Map> maps) {
+        setRedis(maps);
+        setDB(maps);
     }
 
     @Override
