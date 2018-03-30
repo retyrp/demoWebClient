@@ -1,6 +1,7 @@
 package com.example.demoWebClient.config;
 
 import com.example.demoWebClient.config.service.AnyUserDetailsService;
+import com.example.demoWebClient.config.service.GoAuthenticationFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/user/**").hasRole("USER").and().csrf().disable()
+                .antMatchers("/user/**").hasRole("USER")
+                .and().formLogin().loginProcessingUrl("/login")//.usernameParameter("userId").passwordParameter("pwd").loginPage("/login")
+                .failureHandler(new GoAuthenticationFailureHandler())
+                .and().csrf().disable()
         ;
     }
 

@@ -1,5 +1,8 @@
 package com.example.demoWebClient.foundation.dto;
 
+import com.alibaba.fastjson.JSONObject;
+import com.example.demoWebClient.foundation.service.RSAFactory;
+
 import java.util.List;
 import java.util.Map;
 
@@ -49,5 +52,30 @@ public class ResultData {
 
     public void setData(List<Map> data) {
         this.data = data;
+    }
+
+    public JSONObject toJSONObject(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{'serialNo':'")
+                .append(this.serialNo)
+                .append("','timeStamp':'")
+                .append(this.timeStamp)
+                .append("','sign':'")
+                .append(this.sign).append("','data':[");
+        data.forEach(map -> {
+            sb.append("{");
+            map.forEach((key,value)->{
+                sb.append("'").append(key).append("':'").append(value).append("',");
+            });
+            sb.delete(sb.length()-1,sb.length());
+            sb.append("}");
+        });
+        sb.append("]}");
+        return JSONObject.parseObject(sb.toString());
+    }
+
+    public String encryptData(){
+        String data = toJSONObject().toJSONString();
+        RSAFactory.encryptByPrivateKey(data.getBytes(),);
     }
 }

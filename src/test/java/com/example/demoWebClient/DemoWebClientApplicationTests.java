@@ -1,21 +1,28 @@
 package com.example.demoWebClient;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.demoWebClient.account.dto.Role;
 import com.example.demoWebClient.account.service.UserAccountValidationService;
 import com.example.demoWebClient.config.dao.ConfigMapper;
 import com.example.demoWebClient.config.dao.ConfigSqlProvider;
 import com.example.demoWebClient.config.service.AnyUserDetailsService;
 import com.example.demoWebClient.config.service.ConfigLoadService;
+import com.example.demoWebClient.foundation.dto.ResultData;
+import com.example.demoWebClient.foundation.service.MD5Factory;
 import com.example.demoWebClient.foundation.service.RSAFactory;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
+import sun.security.provider.MD5;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringRunner.class)
@@ -30,6 +37,12 @@ public class DemoWebClientApplicationTests {
 
 	@Autowired
 	private ConfigMapper configMapper;
+
+	@Autowired
+    private MD5Factory md5Factory;
+
+	@Autowired
+	StringRedisTemplate stringRedisTemplate;
 
 	@Test
 	public void send(){
@@ -117,4 +130,27 @@ public class DemoWebClientApplicationTests {
 		System.out.println("甲方解密后的数据：" + new String(decode2));
 	}
 
+    @Test
+    public void test6(){
+        System.out.println(md5Factory.encryptPassword("123456","abc"));
+		System.out.println(stringRedisTemplate.opsForValue().get("PUBLIC_SALT"));
+    }
+
+    @Test
+	public void test7(){
+		ResultData r = new ResultData();
+		r.setTimeStamp("4325234523");
+		r.setSign("fdsafa");
+		r.setSerialNo("342143241");
+		List<Map> lm = new ArrayList<>();
+		Map map = new HashMap();
+		Map map2 = new HashMap();
+		map2.put("key3","value3");
+		map.put("key","value");
+		map.put("key2","value2");
+		lm.add(map);
+		lm.add(map2);
+		r.setData(lm);
+		System.out.println(r.toJSONObject().toJSONString());
+	}
 }

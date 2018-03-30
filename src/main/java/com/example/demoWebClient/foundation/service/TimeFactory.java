@@ -14,16 +14,24 @@ import java.util.regex.Pattern;
  * @Title: TimeFactory 时间服务
  * @date 2018/3/29 15:08
  */
-@Service
 public class TimeFactory {
 
     /**
      * 取得当前时间-SQL格式
-     *
+     * 2018-03-30 14:18:43.241
      * @return
      */
-    public java.sql.Timestamp getSqlTime() {
+    public static java.sql.Timestamp getSqlTime() {
         return new java.sql.Timestamp(new Date().getTime());
+    }
+
+    /**
+     * 获取当前时间-时间戳
+     * 1522390936800
+     * @return
+     */
+    public static String getTimeStampNow(){
+        return String.valueOf(new Date().getTime());
     }
 
     /**
@@ -33,7 +41,7 @@ public class TimeFactory {
      * @return
      * @throws ParseException
      */
-    public java.sql.Timestamp getSqlTime(String s) {
+    public static java.sql.Timestamp getSqlTime(String s) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date d = (Date) formatter.parse(s);
@@ -50,7 +58,7 @@ public class TimeFactory {
      *
      * @return
      */
-    public String getStringTimeNumber() {
+    public static String getStringTimeNumber() {
         String reg = "[^0-9]";
         Pattern p = Pattern.compile(reg);
         return (p.matcher((new java.sql.Timestamp((new Date().getTime()))).toString())).replaceAll("").trim();
@@ -62,7 +70,7 @@ public class TimeFactory {
      *
      * @return
      */
-    public String getStringTimeStandard() {
+    public static String getStringTimeStandard() {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
 
@@ -72,7 +80,7 @@ public class TimeFactory {
      * @param t
      * @return
      */
-    public int getComplieDays(Timestamp t) {
+    public static int getComplieDays(Timestamp t) {
         long temp = new Timestamp(new Date().getTime()).getTime() - t.getTime();
         return new Timestamp(temp > 0 ? temp : -temp).getDate();
     }
@@ -83,7 +91,7 @@ public class TimeFactory {
      * @param d
      * @return
      */
-    public int getComplieDays(Date d) {
+    public static int getComplieDays(Date d) {
         long temp = new Date().getTime() - d.getTime();
         return new Date(temp > 0 ? temp : -temp).getDate();
     }
@@ -91,7 +99,7 @@ public class TimeFactory {
     /**
      * 检查是否标准日期格式 yyyy-MM-dd
      */
-    public boolean checkStand(String str) {
+    public static boolean checkStand(String str) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date date = (Date) formatter.parse(str);

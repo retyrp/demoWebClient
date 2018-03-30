@@ -1,5 +1,7 @@
 package com.example.demoWebClient.foundation.service;
 
+import com.example.demoWebClient.foundation.cache.CacheManager;
+
 import javax.crypto.Cipher;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
@@ -47,6 +49,14 @@ public class RSAFactory {
         keyMap.put(PRIVATE_KEY, privateKey);
         return keyMap;
 
+    }
+
+    /**
+     * 获取私钥
+     * @return
+     */
+    public static byte[] getPrivateKey(){
+        return CacheManager.getContent("PRIVATE_KEY").getValue().toString().getBytes();
     }
 
 

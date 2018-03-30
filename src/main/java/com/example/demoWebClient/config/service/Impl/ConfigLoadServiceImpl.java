@@ -4,6 +4,7 @@ import com.example.demoWebClient.config.dao.ConfigMapper;
 import com.example.demoWebClient.config.dto.SystemConfig;
 import com.example.demoWebClient.config.service.ConfigLoadService;
 import com.example.demoWebClient.foundation.service.RedisService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -38,28 +39,35 @@ public class ConfigLoadServiceImpl implements ConfigLoadService{
 
     @Override
     public String loadConfig(String name) {
+
+        //*******************    get    ****************
         List<Map> result = null;
         List list = new ArrayList();
         list.add(name);
         result = callRedis(list);
-        if(!result.isEmpty())
+        if(null != result.get(0).get(name))
             return result
-                    .iterator()
-                    .next()
-                    .get("s_value")
+                    .get(0)
+                    .get(name)
                     .toString();
 
         Map map = new HashMap();
         map.put("s_key",name);
         result = callDB(map);
-        if(result.isEmpty())
+
+        //*********************   set  *****************
+
+        String key = result.get(0).get("s_key").toString();
+        String value = result.get(0).get("s_value").toString();
+        if(StringUtils.isBlank(value))
             return null;
+        result.clear();
+        map.clear();
+        map.put(key,value);
+        result.add(map);
         setRedis(result);
-        return result
-                .iterator()
-                .next()
-                .get("s_value")
-                .toString();
+
+        return value;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.example.demoWebClient.foundation.service.impl;
 
-import com.example.demoWebClient.config.service.ConfigLoadService;
 import com.example.demoWebClient.foundation.service.InterfaceSerialNoService;
 import com.example.demoWebClient.foundation.service.MD5Factory;
 import com.example.demoWebClient.foundation.service.TimeFactory;
@@ -23,7 +22,8 @@ public class InterfaceSerialNoServiceImpl implements InterfaceSerialNoService {
 
     @Override
     public String EncryptedDataS(String serialNo) {
-
+        //解析接收到的报文
+        serialNo.substring( serialNo.length());
         timeFactory.getSqlTime();return null;
     }
 
