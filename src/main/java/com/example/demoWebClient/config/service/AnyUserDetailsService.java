@@ -1,5 +1,7 @@
 package com.example.demoWebClient.config.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demoWebClient.account.dto.Role;
 import com.example.demoWebClient.account.service.UserAccountValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +24,8 @@ public class AnyUserDetailsService implements UserDetailsService {
     UserAccountValidationService userAccountValidationServiceImpl;
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        Role userEntity = userAccountValidationServiceImpl.getUserByUserId(userId);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Role userEntity = userAccountValidationServiceImpl.getUserByUserId(username);
         if (userEntity == null){
             throw new UsernameNotFoundException("用户不存在！");
         }

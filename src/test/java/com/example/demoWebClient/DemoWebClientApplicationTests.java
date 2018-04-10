@@ -153,4 +153,16 @@ public class DemoWebClientApplicationTests {
 		r.setData(lm);
 		System.out.println(r.toJSONObject().toJSONString());
 	}
+
+	@Test
+	public void test8(){
+		String test = "Test is now";
+		try {
+			String sign = Base64.encodeBase64String(RSAFactory.sign(test.getBytes()));
+			System.out.println(sign);
+			System.out.println(RSAFactory.verify(test.getBytes(),sign.getBytes()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

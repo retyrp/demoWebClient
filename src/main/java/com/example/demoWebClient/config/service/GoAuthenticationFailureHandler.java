@@ -18,30 +18,34 @@ import java.util.Map;
 
 public class GoAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override
-    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
         httpServletResponse.setHeader("Content-Type","application/json;charset=utf-8");
         ResultData data = new ResultData();
         List<Map> list = new ArrayList<>();
         Map map = new HashMap();
-        map.put("key","value");
+        map.put("Exception",e.getMessage());
         map.put("yourUri",httpServletRequest.getRequestURI());
         map.put("RemoteAddr",httpServletRequest.getRemoteAddr());
         map.put("RemoteHost",httpServletRequest.getRemoteHost());
         map.put("RemotePort",httpServletRequest.getRemotePort());
-
         map.put("RemoteUser",httpServletRequest.getRemoteUser());
 
-        map.put("ParameterMap",httpServletRequest.getParameterMap().get("_csrf_header")[0]);
+        System.out.println(map);
+        //map.put("ParameterMap",httpServletRequest.getParameterMap().get("_csrf_header")[0]);
         list.add(map);
         //String testData = httpServletRequest.getSession().getAttribute("_csrf").toString();
         //map.put("Data",testData);
 
-        list.add(httpServletRequest.getParameterMap());
+        //list.add(httpServletRequest.getParameterMap());
         data.setSerialNo("");
-        data.setSign("Error_"+ CacheManager.getContent("user_login"));
         data.setTimeStamp(TimeFactory.getTimeStampNow());
         data.setData(list);
-        RSAFactory.encryptByPrivateKey(,RSAFactory.getPrivateKey())
+        try {
+            data.sign();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        //RSAFactory.encryptByPrivateKey(data.encryptData(),RSAFactory.getPrivateKey());
         httpServletResponse.getWriter().print(data.toJSONObject());
         httpServletResponse.getWriter().flush();
 

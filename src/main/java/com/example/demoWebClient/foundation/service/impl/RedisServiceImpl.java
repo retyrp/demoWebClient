@@ -28,8 +28,8 @@ public class RedisServiceImpl implements RedisService{
                     keys) {
                 String s = stringRedisTemplate.opsForValue().get(key);
                 map.put(key,s);
-                maps.add(map);
             }
+            maps.add(map);
             return maps;
         }catch (Exception e){
             e.printStackTrace();
@@ -41,9 +41,10 @@ public class RedisServiceImpl implements RedisService{
     public int setRedis(List<Map> contents) {
 
         for (Map<String,String> temp: contents) {
-            temp.forEach((key, value) -> {
+            temp.forEach((key,value)->{
                 stringRedisTemplate.opsForValue().set(key,value);
             });
+            //stringRedisTemplate.opsForValue().set(temp.get("s_key"),temp.get("s_value"));
         }
         return contents.size();
     }

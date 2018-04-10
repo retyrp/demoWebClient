@@ -1,6 +1,7 @@
 package com.example.demoWebClient.foundation.service;
 
 import com.example.demoWebClient.foundation.cache.CacheManager;
+import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
 import java.security.*;
@@ -14,6 +15,8 @@ import java.util.Map;
 public class RSAFactory {
     //非对称密钥算法
     public static final String KEY_ALGORITHM = "RSA";
+
+    public static final String SIGNATURE_ALGORITHM="MD5withRSA";
 
 
     /**
@@ -55,8 +58,20 @@ public class RSAFactory {
      * 获取私钥
      * @return
      */
-    public static byte[] getPrivateKey(){
-        return CacheManager.getContent("PRIVATE_KEY").getValue().toString().getBytes();
+    public static String getPrivateKey(){
+        String result;
+        result = CacheManager.getContent("PRIVATE_KEY").getValue().toString();
+        return result;
+    }
+
+    /**
+     * 获取公钥
+     * @return String
+     */
+    public static String getPublicKey(){
+        String result;
+        result = CacheManager.getContent("PUBLIC_KEY").getValue().toString();
+        return result;
     }
 
 
@@ -161,8 +176,54 @@ public class RSAFactory {
      * @param keyMap 密钥map
      * @return byte[] 公钥
      */
-    public static byte[] getPublicKey(Map<String, Object> keyMap) throws Exception {
+    public static byte[] getPublicKey(Map<String, Object> keyMap) {
         Key key = (Key) keyMap.get(PUBLIC_KEY);
         return key.getEncoded();
+    }
+
+
+    /**
+     * 使用getPublicKey得到公钥,返回类型为PublicKey
+     * @param key String to PublicKey
+     * @throws Exception
+     */
+    public static PublicKey getPublicKey(String key) throws Exception {
+        byte[] keyBytes;
+        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey publicKey = keyFactory.generatePublic(keySpec);
+        return publicKey;
+    }
+    /**
+     * 转换私钥
+     * @param key String to PrivateKey
+     * @throws Exception
+     */
+    public static PrivateKey getPrivateKey(String key) throws Exception {
+        byte[] keyBytes;
+        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+        return privateKey;
+    }
+
+    //***************************签名和验证*******************************
+    public static byte[] sign(byte[] data) throws Exception{
+        PrivateKey priK = getPrivateKey(getPrivateKey());
+        Signature sig = Signature.getInstance(SIGNATURE_ALGORITHM);
+        sig.initSign(priK);
+        sig.update(data);
+        return sig.sign();
+    }
+
+
+    public static boolean verify(byte[] data,byte[] sign) throws Exception{
+        PublicKey pubK = getPublicKey(getPublicKey());
+        Signature sig = Signature.getInstance(SIGNATURE_ALGORITHM);
+        sig.initVerify(pubK);
+        sig.update(data);
+        return sig.verify(sign);
     }
 }

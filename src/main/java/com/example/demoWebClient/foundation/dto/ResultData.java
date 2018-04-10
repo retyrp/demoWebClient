@@ -2,6 +2,8 @@ package com.example.demoWebClient.foundation.dto;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demoWebClient.foundation.service.RSAFactory;
+import org.apache.commons.codec.binary.Base64;
+import sun.misc.BASE64Decoder;
 
 import java.util.List;
 import java.util.Map;
@@ -16,11 +18,44 @@ public class ResultData {
     private String serialNo;
     /** 时间戳 */
     private String timeStamp;
-    /** 信号标志 */
+    /** 签名 */
     private String sign;
     /** 数据内容 */
     private List<Map> data;
 
+    /**
+     * 转JSON格式
+     * @return
+     */
+    public JSONObject toJSONObject(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{'serialNo':'")
+                .append(this.serialNo)
+                .append("','timeStamp':'")
+                .append(this.timeStamp)
+                .append("','sign':'")
+                .append(this.sign).append("','data':[");
+        data.forEach(map -> {
+            sb.append("{");
+            map.forEach((key,value)->{
+                sb.append("'").append(key).append("':'").append(value).append("',");
+            });
+            sb.delete(sb.length()-1,sb.length());
+            sb.append("}");
+        });
+        sb.append("]}");
+        System.out.println(sb);
+        return JSONObject.parseObject(sb.toString());
+    }
+
+    /**
+     * 签名
+     * @return
+     * @throws Exception
+     */
+    public void sign() throws Exception {
+        setSign(Base64.encodeBase64String(RSAFactory.sign(new BASE64Decoder().decodeBuffer(toJSONObject().getString("data")))));
+    }
 
     public String getSerialNo() {
         return serialNo;
@@ -54,28 +89,6 @@ public class ResultData {
         this.data = data;
     }
 
-    public JSONObject toJSONObject(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("{'serialNo':'")
-                .append(this.serialNo)
-                .append("','timeStamp':'")
-                .append(this.timeStamp)
-                .append("','sign':'")
-                .append(this.sign).append("','data':[");
-        data.forEach(map -> {
-            sb.append("{");
-            map.forEach((key,value)->{
-                sb.append("'").append(key).append("':'").append(value).append("',");
-            });
-            sb.delete(sb.length()-1,sb.length());
-            sb.append("}");
-        });
-        sb.append("]}");
-        return JSONObject.parseObject(sb.toString());
-    }
 
-    public String encryptData(){
-        String data = toJSONObject().toJSONString();
-        RSAFactory.encryptByPrivateKey(data.getBytes(),);
-    }
+
 }

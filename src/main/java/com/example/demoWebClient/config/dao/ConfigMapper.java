@@ -4,11 +4,13 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
 @Mapper
+@Repository
 public interface ConfigMapper {
 
     @UpdateProvider(type=ConfigSqlProvider.class,method = "updateConfigSql")
