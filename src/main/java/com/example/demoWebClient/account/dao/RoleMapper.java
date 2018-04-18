@@ -2,12 +2,14 @@ package com.example.demoWebClient.account.dao;
 
 import com.example.demoWebClient.account.dto.Role;
 import com.example.demoWebClient.account.dto.RoleInfo;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * 用户操作
  */
+@Repository
 public interface RoleMapper {
 
     /** 登录（返回对应角色信息） */

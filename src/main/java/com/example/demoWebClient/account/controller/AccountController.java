@@ -2,29 +2,41 @@ package com.example.demoWebClient.account.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.demoWebClient.foundation.cache.CacheManager;
+import com.example.demoWebClient.account.service.AccountService;
+import com.example.demoWebClient.foundation.dto.ResultData;
 import com.example.demoWebClient.foundation.service.RSAFactory;
-import com.sun.istack.internal.logging.Logger;
-import org.bouncycastle.util.encoders.Base64Encoder;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import sun.misc.BASE64Decoder;
-
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/login/account")
 public class AccountController {
 
-    Logger logger = Logger.getLogger(AccountController.class);
+    //Logger logger = Logger.getLogger(AccountController.class);
 
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @Autowired
+    AccountService accountServiceImpl;
+    /*@RequestMapping(value = "/login",method = RequestMethod.POST)
     public String login(@AuthenticationPrincipal @RequestBody String jsonObjectString){
         JSONObject jsonObject = JSONObject.parseObject(jsonObjectString);
         return "success";
+    }*/
+
+    @RequestMapping(value = "register",method = RequestMethod.POST)
+    public ResultData register(@RequestBody String jsonObjectString){
+        JSONObject jsonObject = JSONObject.parseObject(jsonObjectString);
+        accountServiceImpl.signUp(jsonObject);
+        return null;
+    }
+
+    @RequestMapping(value = "/getInfo",method = RequestMethod.POST)
+    public String getInfo(@RequestBody String jsonObjectString){
+        System.err.println(jsonObjectString);
+        return jsonObjectString;
     }
 
     @RequestMapping(value = "/getToken",method = RequestMethod.GET)

@@ -1,6 +1,7 @@
 package com.example.demoWebClient.account.dao;
 
 import com.example.demoWebClient.account.dto.UAC;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @Title: UacMapper
  * @date 2018/3/7 15:42
  */
+@Repository
 public interface UacMapper {
 
     List<UAC> getAuthInfo(UAC uac);

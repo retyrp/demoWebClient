@@ -8,7 +8,7 @@ public class ConfigSqlProvider {
     public String updateConfigSql(HashMap<String,String> map){
         return new SQL(){
             {
-                UPDATE("SystemConfig");
+                UPDATE("systemconfig");
                 SET( "s_value = '"+map.values().iterator().next()+"'");
                 WHERE("s_key = '"+ map.keySet().iterator().next() +"'");
 
@@ -19,7 +19,7 @@ public class ConfigSqlProvider {
     public String insertConfigSql(HashMap<String,String> map){
         return new SQL(){
             {
-                INSERT_INTO("SystemConfig");
+                INSERT_INTO("systemconfig");
                 map.forEach((key,value)->{
                     VALUES(key,"'"+value+"'");
                 });
@@ -30,7 +30,7 @@ public class ConfigSqlProvider {
     public String deleteConfigSql(HashMap<String,String> map){
         return new SQL(){
             {
-                DELETE_FROM("SystemConfig");
+                DELETE_FROM("systemconfig");
                 map.forEach((key,value)->{
                     WHERE(key+" = '"+value+"'");
             });

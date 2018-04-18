@@ -1,13 +1,10 @@
 package com.example.demoWebClient.config.service;
 
-import com.example.demoWebClient.foundation.cache.CacheManager;
 import com.example.demoWebClient.foundation.dto.ResultData;
-import com.example.demoWebClient.foundation.service.RSAFactory;
 import com.example.demoWebClient.foundation.service.TimeFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

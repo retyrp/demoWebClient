@@ -1,6 +1,7 @@
 package com.example.demoWebClient.filter.account;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.util.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,8 +24,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             String input;
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
-                while (null != (input = br.readLine())) sb.append(input);
-                JSONObject jsonObject = JSONObject.parseObject(sb.toString());
+                input = IOUtils.readAll(br);
+                /*while (null != (input = br.readLine())) sb.append(input);*/
+                JSONObject jsonObject = JSONObject.parseObject(input);
+                System.err.println(jsonObject.toJSONString());
+                System.err.println(input);
                 authRequest = new UsernamePasswordAuthenticationToken(
                         jsonObject.getString("user"), jsonObject.getString("pwd"));
 
@@ -36,7 +40,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             setDetails(request, authRequest);
             return this.getAuthenticationManager().authenticate(authRequest);
         } else {
-            System.out.println(request.getParameterMap().values().toString());
+            System.out.println(request.getContentType());
             return super.attemptAuthentication(request, response);
         }
     }

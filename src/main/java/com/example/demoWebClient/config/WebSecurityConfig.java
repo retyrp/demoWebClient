@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(new GoAccessDeniedHandler())
                 .authenticationEntryPoint(new GoAuthenticationEntryPoint())
                 .and().authorizeRequests()
-                .antMatchers("/", "/csrf","/login/account/login").permitAll()
+                .antMatchers("/", "/csrf","/login/account/**").permitAll()
                 .antMatchers("/hello").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin().usernameParameter("username").passwordParameter("password")
@@ -79,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
         filter.setAuthenticationSuccessHandler(new GoAuthenticationSuccessHandler());
         filter.setAuthenticationFailureHandler(new GoAuthenticationFailureHandler());
-        filter.setFilterProcessesUrl("/login/**");
+        filter.setFilterProcessesUrl("/login/account/login/**");
 
         //这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
         filter.setAuthenticationManager(authenticationManagerBean());

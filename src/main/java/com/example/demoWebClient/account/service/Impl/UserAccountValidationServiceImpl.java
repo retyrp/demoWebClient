@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 
@@ -63,10 +64,13 @@ public class UserAccountValidationServiceImpl implements UserAccountValidationSe
     @Override
     public Role getUserByUserId(String userId) {
         Role r = new Role();
-        r.setUserRole("admin,user");
-        r.setUserPassWord(new BCryptPasswordEncoder().encode("123456"));
-        r.setUserName("KingJiongEn");
-        r.setUID("abc");
+        try {
+            r.setUID(userId);
+            r = roleMapper.login(r);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.warn("[userId]:"+userId+"(ToGet)[Role]:"+r.toString());
+        }
         return r;
     }
 }

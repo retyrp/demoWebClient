@@ -9,7 +9,7 @@ public class Role {
     private String userPassWord;           //Password
     private String userName;               //姓名
     private String userRole;               //用户角色
-    private String userInfo;               //用户信息
+    private String userInfo;               //用户信息 (用户状态 A Normal;B PAUSE;C CLOSE)
 
     public String getUID() {
         return UID;

@@ -3,7 +3,7 @@
 <mapper namespace="com.example.demoWebClient.account.dao.RoleMapper">
     <select id="login" parameterType="com.example.demoWebClient.account.dto.Role" resultType="com.example.demoWebClient.account.dto.Role">
         select r.UID,r.USERNAME as userName,r.USERPWD as userPassWord,r.USEROLE as userRole,r.USERINFO as userInfo
-         FROM ROLE r WHERE #{UID} = r.UID AND #{userPassWord} = r.USERPWD
+         FROM ROLE r WHERE #{UID} = r.UID
     </select>
 
     <select id="getUseInfo" parameterType="com.example.demoWebClient.account.dto.Role" resultType="com.example.demoWebClient.account.dto.RoleInfo">
@@ -61,7 +61,7 @@
 
 
     <insert id="registered_a" parameterType="com.example.demoWebClient.account.dto.Role">
-        insert into ROLE(UID,userPassWord,userName,userRole,userInfo) VALUES (#{UID},#{userPassWord},#{userName},#{userRole},#{userInfo})
+        insert into ROLE(UID,userName,userPwd,useRole,userInfo) VALUES (#{UID},#{userName},#{userPassWord},#{userRole},#{userInfo})
     </insert>
 
     <insert id="registered_b" parameterType="com.example.demoWebClient.account.dto.RoleInfo">

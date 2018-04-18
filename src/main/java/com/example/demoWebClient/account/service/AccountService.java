@@ -1,6 +1,8 @@
 package com.example.demoWebClient.account.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.demoWebClient.account.dto.Role;
+import com.example.demoWebClient.foundation.dto.ResultData;
 
 /**
  * @author YRP
@@ -21,7 +23,7 @@ public interface AccountService {
      * @param r
      * @return
      */
-    boolean signUp(Role r);
+    ResultData signUp(JSONObject jsonObject);
 
     /**
      * 注销

@@ -61,10 +61,10 @@ public class DemoWebClientApplicationTests {
 
 	@Test
 	public void test2(){
-		HashMap map = new HashMap<String,String>();
 		/*map.put("s_key","yes");
 		map.put("s_value","no");*/
-		System.out.println(configMapper.loadConfig(map));
+		HashMap map = new HashMap<String,String>();
+		System.out.println(configLoadServiceImpl.loadConfig("yes"));
 	}
 
 
